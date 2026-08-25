@@ -1,0 +1,13 @@
+# Secrets
+*.crt
+*.key
+*.keystore
+*.pem
+.aws
+.env
+.ssh
+secrets
+
+node_modules/
+*.tgz
+.DS_Store
