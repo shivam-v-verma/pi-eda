@@ -1,0 +1,28 @@
+# Shared matplotlib style for /skill:exploring-data.
+# This is a template shown for example; include in default matplotlib 
+# style sheet dir (see README.md).
+# See plotting.md for the conventions this backs and what still needs a
+# per-script judgment call (aspect ratio, bin count, title text, etc).
+#
+# Full rcParams menu: 
+# https://github.com/matplotlib/matplotlib/blob/main/lib/matplotlib/mpl-data/matplotlibrc
+
+figure.dpi: 150
+savefig.dpi: 150
+savefig.format: png
+savefig.bbox: tight
+figure.autolayout: True
+
+axes.grid: False
+# CSS named colors: https://developer.mozilla.org/en-US/docs/Web/CSS/named-color
+axes.prop_cycle: cycler('color', ['lightsteelblue', 'darksalmon', 'darkseagreen', 'plum', 'burlywood', 'rosybrown'])
+
+font.size: 10
+axes.titlesize: 10
+axes.labelsize: 10
+legend.fontsize: 10
+xtick.labelsize: 10
+ytick.labelsize: 10
+legend.frameon: False
+
+image.cmap: Blues
