@@ -59,6 +59,7 @@ its own narrower table.
 
 | Mistake | Fix |
 | --- | --- |
+| Not tracking which `workflow.md` stage you're at | Before each stage transition, name the current node and the edge you're taking out loud; if you can't confidently name it, reopen `workflow.md` |
 | Running the full dataset before a smoke test | See `checking-and-running-scripts.md` -- always sample/time on a subset first |
 | Auto-advancing to the next question without a framing check | See `pre-code-checkpoints.md` -- confirm framing before each new question, not once for the whole analysis |
 | Picking the report/subfolder name yourself instead of asking | Ask before creating it -- one name, shared by the file and its folder |
