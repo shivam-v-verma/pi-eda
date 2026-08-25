@@ -1,6 +1,6 @@
 ---
 name: job-runner
-description: Launches and monitors a heavy/long-running analysis script in the background
+description: Launches a heavy/long-running analysis script under a memory cap and blocks on it
 tools: bash, read
 inheritProjectContext: true
 ---
@@ -12,23 +12,26 @@ that already happened before you were dispatched.
 ## What to do
 
 - Confirm inputs before launching:
-  - The estimated runtime and peak memory from the smoke test (should be
-      in the task you were given -- if missing, ask the dispatching agent
-      for it rather than guessing).
-  - Whether `systemd-run` is available on this machine.
-- Launch the script as a background process (following the project's run
-  convention, e.g. `uv run`).
-- Cap it with a memory limit so a runaway process gets killed by the OS
-  instead of taking down the machine, sized off the estimate with
-  headroom (e.g. 2x the estimated peak):
-  - `systemd-run --scope -p MemoryMax=<budget> --user -- uv run <script>`
-      if available.
-  - Otherwise, say so explicitly and fall back to periodic `ps`/`smem`
-      checks with a manual kill.
-- Monitor progress and memory use periodically rather than blocking on it
-  synchronously -- this is in addition to the hard cap above, not a
-  replacement for it, since you want to know about a job trending toward
-  the ceiling before it gets killed.
+  - The estimated runtime (should be in the task you were given -- if
+      missing, ask the dispatching agent rather than guessing).
+  - Whether `systemd-run` is available (Linux only -- no shell-level
+      equivalent on macOS or Windows).
+  - Determine how much memory can be used for the process. Check
+    available memory with `free -m` and leave at least 1GB free.
+- If `systemd-run` is available:
+  - Run in the foreground, blocked on completion using:
+  `systemd-run --scope -p MemoryMax=<budget> --user -- uv run <script>`.
+  - The cap is the safety net, so you should not:
+    - Poll for memory consumption
+    - Detach from the process
+- If `systemd-run` is not available:
+  - Say so explicitly. There is no OS cap here, so you are the safety
+    net.
+  - Launch the script as a separate process, then poll memory yourself
+    against the memory budget.
+  - Do this as a *single* bash call with an internal sleep/check loop.
+    Kill and report if it crosses the budget to save token context.
+    Do not use separate agent turns here.
 - Report back once it completes: success/failure, runtime, and where the
   output landed. On failure, include the actual error, not just "it
   failed."

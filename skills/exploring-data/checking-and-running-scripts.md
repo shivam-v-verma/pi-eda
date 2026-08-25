@@ -78,10 +78,10 @@ pass, or committing to a large/expensive run that turns out wrong.
 ### Dispatching the `job-runner`
 
 - Once clear to launch:
-  `subagent({agent:"job-runner", task:"<script path + output location + estimated runtime + estimated peak memory>"})`.
+  `subagent({agent:"job-runner", task:"<script path + output location + estimated runtime>"})`.
   This frees the main session to keep iterating while it runs. Pass the
-  runtime/memory estimate from your smoke test (see "Judging Heavy vs.
-  Light Scale-up" above) rather than making it re-derive them blind.
+  runtime estimate from your smoke test (see "Judging Heavy vs. Light
+  Scale-up" above) rather than making it re-derive it blind.
 - Register a wake instead of blocking: `subagent_wait({id, nonBlocking: true})`
   after launching. Non-blocking waits allow you to continue the conversation
   with the user while waiting.
