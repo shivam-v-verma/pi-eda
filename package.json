@@ -1,0 +1,18 @@
+{
+  "name": "pi-eda",
+  "version": "0.1.0",
+  "description": "Pi tooling for interactive exploratory data analysis.",
+  "keywords": ["pi-package", "pi", "eda", "exploratory-data-analysis"],
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*",
+    "@earendil-works/pi-tui": "*",
+    "typebox": "*"
+  },
+  "pi": {
+    "extensions": ["./extensions"],
+    "skills": ["./skills"],
+    "subagents": {
+      "agents": ["./agents"]
+    }
+  }
+}
