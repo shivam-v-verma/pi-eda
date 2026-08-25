@@ -82,6 +82,9 @@ pass, or committing to a large/expensive run that turns out wrong.
   This frees the main session to keep iterating while it runs. Pass the
   runtime/memory estimate from your smoke test (see "Judging Heavy vs.
   Light Scale-up" above) rather than making it re-derive them blind.
+- Register a wake instead of blocking: `subagent_wait({id, nonBlocking: true})`
+  after launching. Non-blocking waits allow you to continue the conversation
+  with the user while waiting.
 
 ## Common Mistakes
 
