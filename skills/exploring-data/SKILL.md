@@ -23,13 +23,15 @@ and suggest or build the plots that interrogate them. What a confirmed pattern
 *means*, the story it tells, is the user's call: hand back a clear summary of
 what the figure shows, not a conclusion dressed as a finding.
 
-If using this skill, start by running `init` on `eda-workflow-tracker` with
-`graphPath: "skills/exploring-data/workflow.graph.json"` for guidance on what
-stage you should be working on. When done with the stage, always call
-`advance` on the `eda-workflow-tracker` before performing the next action or
-moving on to the next stage. See `workflow.md` for stages of this skill. In all stages,
-confirm framing with the user. Never run a batch of stages by yourself; always
-interleave by checking for the user's insight/thoughts.
+If using this skill, you **must** first:
+
+- Run `init` on `eda-workflow-tracker` with `graphPath:
+  "skills/exploring-data/workflow.graph.json"` for guidance on what stage you
+  should be working on.
+- Read `workflow.md` for instructions for each stage.
+
+**Always call `advance` on the `eda-workflow-tracker` when done with a
+stage before performing the next action or moving on to the next stage.**
 
 A good hypothesis is usually a simple, clean one -- reachable through better
 framing of the question, not through aggressively slicing the dataset more ways
