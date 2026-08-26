@@ -59,7 +59,8 @@ its own narrower table.
 
 | Mistake | Fix |
 | --- | --- |
-| Not tracking which `workflow.md` stage you're at | Use the `workflow_tracker` tool (`init` at skill entry, `advance` after each stage, `status` to check) instead of holding the graph in your head |
+| Doing any work using this skill (e.g. peeking at data, building a script, dispatching a checker) without having initialized `workflow_tracker` with `init` | `init` as soon as you decide to use this skill. `workflow_tracker` is essential to this skill. |
+| Doing a stage without calling `advance` after it | Treat `advance` as part of finishing the stage, not separate bookkeeping. If you just did something on the graph, the next tool call is `advance`, not the action of the next stage |
 | Running the full dataset before a smoke test | See `checking-and-running-scripts.md` -- always sample/time on a subset first |
 | Auto-advancing to the next question without a framing check | See `pre-code-checkpoints.md` -- confirm framing before each new question, not once for the whole analysis |
 | Picking the report/subfolder name yourself instead of asking | Ask before creating it -- one name, shared by the file and its folder |
