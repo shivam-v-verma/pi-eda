@@ -1,20 +1,12 @@
 # Workflow
 
-Loop/flow-control for `/skill:exploring-data`.
-
-The user drives this loop: they propose or pick the next thing to plot or
-check, you build it and return what it shows. They then interpret it
-and pick next steps or ask additional questions.
-
-This is a looped pipeline, exiting only when the user decides to
-lock-in an analysis.
+Loop/flow-control for `/skill:exploring-data`. This file is the legend for
+the node names in `workflow.graph.json`.
 
 The graph (nodes + legal edges) is `workflow.graph.json`, machine-readable
 for the `workflow_tracker` tool. Call `workflow_tracker init` with that path
 at skill entry, `advance` after each stage, `status` whenever you need to
-know where you are instead of holding it in your head. It also shows a
-one-line status widget (raw current node name) so the user can see where
-things stand.
+know where you are instead of holding it in your head.
 
 | Stage | Turn | What it looks like | See |
 | --- | --- | --- | --- |
