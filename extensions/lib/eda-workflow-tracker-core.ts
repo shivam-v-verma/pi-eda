@@ -11,6 +11,17 @@ export interface WorkflowGraph {
   edges: Record<string, string[]>;
 }
 
+/** True if `value` has the { start: string, edges: object } shape a WorkflowGraph requires. */
+export function isValidGraph(value: unknown): value is WorkflowGraph {
+  if (typeof value !== "object" || value === null) return false;
+  const candidate = value as Record<string, unknown>;
+  return (
+    typeof candidate.start === "string" &&
+    typeof candidate.edges === "object" &&
+    candidate.edges !== null
+  );
+}
+
 export interface WorkflowTrackerDetails {
   action: "init" | "advance" | "status" | "clear";
   graphPath: string;
@@ -90,7 +101,7 @@ export function handleAdvance(
       graphPath,
       current,
       next: legalFromCurrent,
-      error: `"${to}" is not a known node in this graph`,
+      error: `"${to}" is not a known node in this graph; legal: ${JSON.stringify(legalFromCurrent)}`,
     };
   }
   return { graphPath, current: canonical, next: nextFrom(graph, canonical) };
@@ -131,7 +142,7 @@ export function reconstructFromBranch(entries: BranchEntry[]): ActionResult {
     if (
       !msg ||
       msg.role !== "toolResult" ||
-      msg.toolName !== "workflow_tracker"
+      msg.toolName !== "eda-workflow-tracker"
     )
       continue;
     const details = msg.details;

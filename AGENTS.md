@@ -10,7 +10,7 @@ pi-eda/
 ├── eda.mplstyle.example          # matplotlib style template (see below)
 ├── extensions/
 │   ├── show.ts                   # `show` tool: renders an image to the user without LLM tokens
-│   ├── eda-workflow-tracker.ts   # `workflow_tracker` tool: named-state workflow graph tracking
+│   ├── eda-workflow-tracker.ts   # `eda-workflow-tracker` tool: named-state workflow graph tracking
 │   └── lib/eda-workflow-tracker-core.ts  # its pure logic, unit-tested
 ├── tests/extension/               # vitest specs for the extensions above
 ├── agents/

@@ -2,7 +2,7 @@
 
 This file is the legend for the EDA workflow.
 
-Use the `workflow_tracker` tool to determine what stage you're on; perform
+Use the `eda-workflow-tracker` tool to determine what stage you're on; perform
 exactly that stage of work; and then call `advance` before starting the next
 stage. Call `status` whenever you need to know where you are instead of holding
 it in your head.

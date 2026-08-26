@@ -29,6 +29,7 @@ import {
   type WorkflowTrackerDetails,
   type BranchEntry,
   type ActionResult,
+  isValidGraph,
   handleInit,
   handleAdvance,
   handleStatus,
@@ -85,12 +86,12 @@ export default function (pi: ExtensionAPI) {
   const updateWidget = (ctx: ExtensionContext) => {
     if (!ctx.hasUI) return;
     const text = formatWidgetText(current);
-    if (!text) {
-      ctx.ui.setWidget("workflow_tracker", undefined);
-    } else {
-      ctx.ui.setWidget("workflow_tracker", (_tui, theme) => {
+    if (text) {
+      ctx.ui.setWidget("eda-workflow-tracker", (_tui, theme) => {
         return new Text(theme.fg("muted", text), 0, 0);
       });
+    } else {
+      ctx.ui.setWidget("eda-workflow-tracker", undefined);
     }
   };
 
@@ -107,7 +108,7 @@ export default function (pi: ExtensionAPI) {
   }
 
   pi.registerTool({
-    name: "workflow_tracker",
+    name: "eda-workflow-tracker",
     label: "Workflow Tracker",
     description:
       "Track the current state in a named-state workflow graph (branches/loop-backs, not a flat " +
@@ -135,7 +136,11 @@ export default function (pi: ExtensionAPI) {
               resolve(ctx.cwd, params.graphPath),
               "utf-8",
             );
-            graph = JSON.parse(raw) as WorkflowGraph;
+            const parsed = JSON.parse(raw);
+            if (!isValidGraph(parsed)) {
+              throw new Error('expected { start: string, edges: object }');
+            }
+            graph = parsed;
           } catch (err) {
             result = {
               graphPath,
@@ -225,7 +230,7 @@ export default function (pi: ExtensionAPI) {
     },
 
     renderCall(args, theme) {
-      let text = theme.fg("toolTitle", theme.bold("workflow_tracker "));
+      let text = theme.fg("toolTitle", theme.bold("eda-workflow-tracker "));
       text += theme.fg("muted", args.action);
       if (args.action === "advance" && args.to) {
         text += ` -> ${theme.fg("accent", args.to)}`;

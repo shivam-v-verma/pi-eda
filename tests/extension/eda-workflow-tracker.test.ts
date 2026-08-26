@@ -6,6 +6,7 @@ import {
   handleClear,
   formatWidgetText,
   reconstructFromBranch,
+  isValidGraph,
   type WorkflowGraph,
   type BranchEntry,
 } from "../../extensions/lib/eda-workflow-tracker-core.js";
@@ -31,6 +32,26 @@ describe("handleInit", () => {
   test("next lists edges out of the start node", () => {
     const result = handleInit(graph, "some/path.json");
     expect(result.next).toEqual(["B"]);
+  });
+});
+
+describe("isValidGraph", () => {
+  test("accepts a well-shaped graph", () => {
+    expect(isValidGraph({ start: "A", edges: { A: ["B"] } })).toBe(true);
+  });
+
+  test("rejects a missing edges key", () => {
+    expect(isValidGraph({ start: "A" })).toBe(false);
+  });
+
+  test("rejects a missing start key", () => {
+    expect(isValidGraph({ edges: {} })).toBe(false);
+  });
+
+  test("rejects non-object input", () => {
+    expect(isValidGraph(null)).toBe(false);
+    expect(isValidGraph("A")).toBe(false);
+    expect(isValidGraph([])).toBe(false);
   });
 });
 
@@ -80,6 +101,11 @@ describe("handleAdvance", () => {
     expect(result.error).toContain("not-a-real-node");
     expect(result.current).toBe("A");
   });
+
+  test("force to an unknown node still lists legal options in the error", () => {
+    const result = handleAdvance(graph, "A", "not-a-real-node", true);
+    expect(result.error).toContain("B");
+  });
 });
 
 describe("handleStatus", () => {
@@ -120,14 +146,19 @@ describe("formatWidgetText", () => {
 });
 
 describe("reconstructFromBranch", () => {
-  test("picks the last non-error workflow_tracker result", () => {
+  test("picks the last non-error eda-workflow-tracker result", () => {
     const entries: BranchEntry[] = [
       {
         type: "message",
         message: {
           role: "toolResult",
-          toolName: "workflow_tracker",
-          details: { action: "init", graphPath: "p.json", current: "A" },
+          toolName: "eda-workflow-tracker",
+          details: {
+            action: "init",
+            graphPath: "p.json",
+            current: "A",
+            next: ["B"],
+          },
         },
       },
       { type: "message", message: { role: "user" } },
@@ -135,19 +166,25 @@ describe("reconstructFromBranch", () => {
         type: "message",
         message: {
           role: "toolResult",
-          toolName: "workflow_tracker",
-          details: { action: "advance", graphPath: "p.json", current: "B" },
+          toolName: "eda-workflow-tracker",
+          details: {
+            action: "advance",
+            graphPath: "p.json",
+            current: "B",
+            next: ["C", "D"],
+          },
         },
       },
       {
         type: "message",
         message: {
           role: "toolResult",
-          toolName: "workflow_tracker",
+          toolName: "eda-workflow-tracker",
           details: {
             action: "advance",
             graphPath: "p.json",
             current: "B",
+            next: ["C", "D"],
             error: "nope",
           },
         },
