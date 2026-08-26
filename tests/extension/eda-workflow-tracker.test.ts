@@ -27,6 +27,11 @@ describe("handleInit", () => {
     expect(result.current).toBe("A");
     expect(result.graphPath).toBe("some/path.json");
   });
+
+  test("next lists edges out of the start node", () => {
+    const result = handleInit(graph, "some/path.json");
+    expect(result.next).toEqual(["B"]);
+  });
 });
 
 describe("handleAdvance", () => {
@@ -36,11 +41,26 @@ describe("handleAdvance", () => {
     expect(result.current).toBe("B");
   });
 
+  test("next lists edges out of the new current node", () => {
+    const result = handleAdvance(graph, "A", "B", false);
+    expect(result.next).toEqual(["C", "D"]);
+  });
+
+  test("next is empty on a terminal node", () => {
+    const result = handleAdvance(graph, "C", "E", false);
+    expect(result.next).toEqual([]);
+  });
+
   test("non-adjacent transition without force fails and lists legal options", () => {
     const result = handleAdvance(graph, "A", "E", false);
     expect(result.error).toContain("E");
     expect(result.error).toContain("B");
     expect(result.current).toBe("A");
+  });
+
+  test("failed transition leaves next as the unchanged current node's edges", () => {
+    const result = handleAdvance(graph, "A", "E", false);
+    expect(result.next).toEqual(["B"]);
   });
 
   test("non-adjacent transition with force and a valid node succeeds", () => {
@@ -64,7 +84,15 @@ describe("handleAdvance", () => {
 
 describe("handleStatus", () => {
   test("returns current unchanged", () => {
-    expect(handleStatus("B").current).toBe("B");
+    expect(handleStatus(graph, "B").current).toBe("B");
+  });
+
+  test("next lists edges out of current", () => {
+    expect(handleStatus(graph, "B").next).toEqual(["C", "D"]);
+  });
+
+  test("next is empty when no graph is loaded", () => {
+    expect(handleStatus(undefined, "").next).toEqual([]);
   });
 });
 
@@ -72,6 +100,10 @@ describe("handleClear", () => {
   test("resets current to empty", () => {
     const result = handleClear();
     expect(result.current).toBe("");
+  });
+
+  test("next is empty", () => {
+    expect(handleClear().next).toEqual([]);
   });
 });
 

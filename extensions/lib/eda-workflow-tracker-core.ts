@@ -15,13 +15,20 @@ export interface WorkflowTrackerDetails {
   action: "init" | "advance" | "status" | "clear";
   graphPath: string;
   current: string;
+  next: string[];
   error?: string;
 }
 
 export interface ActionResult {
   graphPath: string;
   current: string;
+  next: string[];
   error?: string;
+}
+
+/** Nodes reachable in one step from `node`, or [] if none/no graph loaded. */
+function nextFrom(graph: WorkflowGraph | undefined, node: string): string[] {
+  return graph?.edges[node] ?? [];
 }
 
 function allNodes(edges: Record<string, string[]>): Set<string> {
@@ -48,7 +55,11 @@ export function handleInit(
   graph: WorkflowGraph,
   graphPath: string,
 ): ActionResult {
-  return { graphPath, current: graph.start };
+  return {
+    graphPath,
+    current: graph.start,
+    next: nextFrom(graph, graph.start),
+  };
 }
 
 export function handleAdvance(
@@ -66,10 +77,11 @@ export function handleAdvance(
       return {
         graphPath,
         current,
+        next: legalFromCurrent,
         error: `"${to}" is not reachable from "${current}"; legal: ${JSON.stringify(legalFromCurrent)}`,
       };
     }
-    return { graphPath, current: canonical };
+    return { graphPath, current: canonical, next: nextFrom(graph, canonical) };
   }
 
   const canonical = canonicalize(allNodes(graph.edges), to);
@@ -77,18 +89,23 @@ export function handleAdvance(
     return {
       graphPath,
       current,
+      next: legalFromCurrent,
       error: `"${to}" is not a known node in this graph`,
     };
   }
-  return { graphPath, current: canonical };
+  return { graphPath, current: canonical, next: nextFrom(graph, canonical) };
 }
 
-export function handleStatus(current: string, graphPath = ""): ActionResult {
-  return { graphPath, current };
+export function handleStatus(
+  graph: WorkflowGraph | undefined,
+  current: string,
+  graphPath = "",
+): ActionResult {
+  return { graphPath, current, next: nextFrom(graph, current) };
 }
 
 export function handleClear(): ActionResult {
-  return { graphPath: "", current: "" };
+  return { graphPath: "", current: "", next: [] };
 }
 
 export function formatWidgetText(current: string): string | undefined {
@@ -107,7 +124,7 @@ export interface BranchEntry {
 }
 
 export function reconstructFromBranch(entries: BranchEntry[]): ActionResult {
-  let state: ActionResult = { graphPath: "", current: "" };
+  let state: ActionResult = { graphPath: "", current: "", next: [] };
   for (const entry of entries) {
     if (entry.type !== "message") continue;
     const msg = entry.message;
@@ -119,7 +136,11 @@ export function reconstructFromBranch(entries: BranchEntry[]): ActionResult {
       continue;
     const details = msg.details;
     if (details && !details.error) {
-      state = { graphPath: details.graphPath, current: details.current };
+      state = {
+        graphPath: details.graphPath,
+        current: details.current,
+        next: details.next,
+      };
     }
   }
   return state;

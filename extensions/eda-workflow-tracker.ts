@@ -28,6 +28,7 @@ import {
   type WorkflowGraph,
   type WorkflowTrackerDetails,
   type BranchEntry,
+  type ActionResult,
   handleInit,
   handleAdvance,
   handleStatus,
@@ -116,7 +117,7 @@ export default function (pi: ExtensionAPI) {
     parameters: WorkflowTrackerParams,
 
     async execute(_toolCallId, params, _signal, _onUpdate, ctx) {
-      let result: { graphPath: string; current: string; error?: string };
+      let result: ActionResult;
 
       switch (params.action) {
         case "init": {
@@ -124,6 +125,7 @@ export default function (pi: ExtensionAPI) {
             result = {
               graphPath,
               current,
+              next: [],
               error: "graphPath required for init",
             };
             break;
@@ -138,6 +140,7 @@ export default function (pi: ExtensionAPI) {
             result = {
               graphPath,
               current,
+              next: [],
               error: `failed to load graph at "${params.graphPath}": ${(err as Error).message}`,
             };
             break;
@@ -153,12 +156,18 @@ export default function (pi: ExtensionAPI) {
             result = {
               graphPath,
               current,
+              next: [],
               error: "no graph loaded -- call init first",
             };
             break;
           }
           if (!params.to) {
-            result = { graphPath, current, error: "to required for advance" };
+            result = {
+              graphPath,
+              current,
+              next: [],
+              error: "to required for advance",
+            };
             break;
           }
           result = handleAdvance(
@@ -173,7 +182,7 @@ export default function (pi: ExtensionAPI) {
           break;
         }
         case "status": {
-          result = handleStatus(current, graphPath);
+          result = handleStatus(graph, current, graphPath);
           break;
         }
         case "clear": {
@@ -188,6 +197,7 @@ export default function (pi: ExtensionAPI) {
           result = {
             graphPath,
             current,
+            next: [],
             error: `unknown action: ${params.action as string}`,
           };
         }
@@ -197,6 +207,7 @@ export default function (pi: ExtensionAPI) {
         action: params.action,
         graphPath: result.graphPath,
         current: result.current,
+        next: result.next,
         ...(result.error ? { error: result.error } : {}),
       };
 
@@ -206,7 +217,7 @@ export default function (pi: ExtensionAPI) {
             type: "text",
             text: result.error
               ? `Error: ${result.error}`
-              : `current: "${result.current}"`,
+              : `current: "${result.current}"; next: ${JSON.stringify(result.next)}`,
           },
         ],
         details,
