@@ -1,7 +1,6 @@
 {
-  "start": "Start analysis",
+  "start": "Scope the analysis",
   "edges": {
-    "Start analysis": ["Scope the analysis"],
     "Scope the analysis": ["Peek at the data"],
     "Peek at the data": ["Propose/ask a question"],
     "Propose/ask a question": ["Build script/plot"],

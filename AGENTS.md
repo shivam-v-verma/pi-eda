@@ -17,11 +17,9 @@ pi-eda/
 └── skills/
     ├── exploring-data/           # iteration/plotting phase
     │   ├── SKILL.md              # entry point
-    │   ├── workflow.md           # stages of the skill
+    │   ├── workflow.md           # stages of the skill (framing, smoke test, script-checker/job-runner dispatch)
     │   ├── directory-structure.md  # eda/ scripts+figs tree, numbering rules
-    │   ├── plotting.md           # chart conventions
-    │   ├── checking-and-running-scripts.md  # smoke test, script-checker/job-runner dispatch
-    │   └── pre-code-checkpoints.md  # framing check before each new question
+    │   └── plotting.md           # chart conventions
     └── finishing-exploratory-data-analysis/  # lock-in/report phase
         ├── SKILL.md              # entry point
         └── verification-dispatch.md  # reread pass, naive-reader/critical-auditor dispatch, severity rubric

@@ -23,9 +23,12 @@ and suggest or build the plots that interrogate them. What a confirmed pattern
 *means*, the story it tells, is the user's call: hand back a clear summary of
 what the figure shows, not a conclusion dressed as a finding.
 
-See `workflow.md` for stages of this skill. In all stages, confirm framing
-with the user. Never run a batch of steps by yourself; always interleave
-by checking for the user's insight/thoughts.
+If using this skill, start by running `init` on `workflow_tracker` for guidance
+on what stage you should be working on. When done with the stage, always call
+`advance` on the `workflow_tracker` before performing the next action or moving
+on to the next stage. See `workflow.md` for stages of this skill. In all stages,
+confirm framing with the user. Never run a batch of stages by yourself; always
+interleave by checking for the user's insight/thoughts.
 
 A good hypothesis is usually a simple, clean one -- reachable through better
 framing of the question, not through aggressively slicing the dataset more ways
@@ -59,12 +62,12 @@ its own narrower table.
 
 | Mistake | Fix |
 | --- | --- |
-| Doing any work using this skill (e.g. peeking at data, building a script, dispatching a checker) without having initialized `workflow_tracker` with `init` | `init` as soon as you decide to use this skill. `workflow_tracker` is essential to this skill. |
+| Doing any work using this skill (e.g. scoping the analysis, peeking at data, building a script) without having initialized `workflow_tracker` with `init` | `init` as soon as you decide to use this skill. `workflow_tracker` is essential to this skill. |
 | Doing a stage without calling `advance` after it | Treat `advance` as part of finishing the stage, not separate bookkeeping. If you just did something on the graph, the next tool call is `advance`, not the action of the next stage |
-| Running the full dataset before a smoke test | See `checking-and-running-scripts.md` -- always sample/time on a subset first |
-| Auto-advancing to the next question without a framing check | See `pre-code-checkpoints.md` -- confirm framing before each new question, not once for the whole analysis |
+| Running the full dataset before a smoke test | See `workflow.md` (`Build script/plot`) -- always sample/time on a subset first |
+| Auto-advancing to the next question without a framing check | See `workflow.md` (`Propose/ask a question`) -- confirm framing before each new question, not once for the whole analysis |
 | Picking the report/subfolder name yourself instead of asking | Ask before creating it -- one name, shared by the file and its folder |
-| Launching a heavy scale-up run while the `script-checker` is still pending | See `checking-and-running-scripts.md` -- wait for it, or the expensive run finishes before a material issue could surface |
+| Launching a heavy scale-up run while the `script-checker` is still pending | See `workflow.md` (`Dispatch script-checker`) -- wait for it, or the expensive run finishes before a material issue could surface |
 | Deleting/pruning a failed or paused script | Leave it in place with a status docstring unless the user explicitly asks to remove it |
 | Treating an approval-sounding signal ("looks great", "keep going", "I trust your judgment") as done | Ask whether to move to `/skill:finishing-exploratory-data-analysis` -- don't auto-advance and don't stay silent |
 | Chasing a pattern that only appears after trying many slices/cuts of the data | Multiple-comparisons risk -- go back to framing, not more cuts |
