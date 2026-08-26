@@ -74,13 +74,25 @@ export default function (pi: ExtensionAPI) {
   let graph: WorkflowGraph | undefined;
   let current = "";
 
-  const reconstructState = (ctx: ExtensionContext) => {
+  const loadGraphFile = async (cwd: string, path: string): Promise<unknown> => {
+    const raw = await readFile(resolve(cwd, path), "utf-8");
+    return JSON.parse(raw);
+  };
+
+  const reconstructState = async (ctx: ExtensionContext) => {
     const state = reconstructFromBranch(
       ctx.sessionManager.getBranch() as BranchEntry[],
     );
     graphPath = state.graphPath;
     current = state.current;
-    graph = undefined; // reloaded lazily from graphPath on next advance
+    graph = undefined;
+    if (!graphPath) return;
+    try {
+      const parsed = await loadGraphFile(ctx.cwd, graphPath);
+      if (isValidGraph(parsed)) graph = parsed;
+    } catch {
+      // leave graph undefined -- advance/status report it as not loaded
+    }
   };
 
   const updateWidget = (ctx: ExtensionContext) => {
@@ -102,7 +114,7 @@ export default function (pi: ExtensionAPI) {
     "session_tree",
   ] as const) {
     pi.on(event, async (_event, ctx) => {
-      reconstructState(ctx);
+      await reconstructState(ctx);
       updateWidget(ctx);
     });
   }
@@ -132,13 +144,9 @@ export default function (pi: ExtensionAPI) {
             break;
           }
           try {
-            const raw = await readFile(
-              resolve(ctx.cwd, params.graphPath),
-              "utf-8",
-            );
-            const parsed = JSON.parse(raw);
+            const parsed = await loadGraphFile(ctx.cwd, params.graphPath);
             if (!isValidGraph(parsed)) {
-              throw new Error('expected { start: string, edges: object }');
+              throw new Error("expected { start: string, edges: object }");
             }
             graph = parsed;
           } catch (err) {
