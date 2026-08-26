@@ -5,6 +5,7 @@ Pi skills and subagents for interactive exploratory data analysis.
 - `skills/exploring-data`: iterative analysis & plotting
 - `skills/finishing-exploratory-data-analysis`: locking in analysis into a wiki-style report
 - `show` extension: renders a figure to the user in the TUI without spending tokens on it
+- `workflow_tracker` extension: tracks stage progress through `exploring-data`'s workflow graph
 
 ## Requires
 

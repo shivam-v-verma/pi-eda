@@ -1,14 +1,18 @@
 # pi-eda
 
 This repo is pi package for interactive EDA.
-No app code, no build/test step. Edits here are to `.md` skill/agent files.
+Most edits are to `.md` skill/agent files; `extensions/` has TS tool code
+with vitest tests (`npm test`).
 
 ```
 pi-eda/
 ├── package.json                  # declares pi.extensions / pi.skills / pi.subagents.agents
 ├── eda.mplstyle.example          # matplotlib style template (see below)
 ├── extensions/
-│   └── show.ts                   # `show` tool: renders an image to the user without LLM tokens
+│   ├── show.ts                   # `show` tool: renders an image to the user without LLM tokens
+│   ├── eda-workflow-tracker.ts   # `workflow_tracker` tool: named-state workflow graph tracking
+│   └── lib/eda-workflow-tracker-core.ts  # its pure logic, unit-tested
+├── tests/extension/               # vitest specs for the extensions above
 ├── agents/
 │   ├── script-checker.md         # reviews a script against stated intent pre-scale-up
 │   ├── job-runner.md             # launches/monitors a cleared heavy run
