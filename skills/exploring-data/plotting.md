@@ -10,8 +10,9 @@ per-type rule that hasn't been stated.
 
 - Generate figures with matplotlib, saved as PNG, following the conventions
   below.
-- Apply the user's `eda.mplstyle` at the top of the script
-  (`plt.style.use("eda")`) and respect user defaults.
+- If `~/.config/matplotlib/stylelib/eda.mplstyle` exists, apply it at the top
+  of the script (`plt.style.use("eda")`) and respect user defaults. Otherwise
+  skip `plt.style.use` and fall back to Defaults below.
 - Visually inspect every figure with the `read` tool before treating it as a
   result -- never make hypotheses from a figure you haven't looked at.
 - `read` is for your own inspection. When you're ready to show the figure to
@@ -30,10 +31,8 @@ per-type rule that hasn't been stated.
 If the user has not set up `eda.mplstyle` or has not offered opinions
 on plot style, use these defaults:
 
-- Colors: `eda.mplstyle` (see the repo-root `eda.mplstyle.example`) defaults to
-  `lightsteelblue` for one color and `Blues`
-  for a colormap -- pick something else only if needed to convey a point, e.g.
-  categorical comparison.
+- Colors: `lightsteelblue` for one color and `Blues` for a colormap -- pick
+  something else only if needed to convey a point, e.g. categorical comparison.
 - Gridlines: none. Spines / ticks: matplotlib defaults -- don't add or strip
   either.
 - Titles: Be brief -- words must earn their space. Detailed descriptions belong
