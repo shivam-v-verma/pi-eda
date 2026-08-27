@@ -9,19 +9,10 @@
  */
 
 import { readFile, stat } from "node:fs/promises";
-import { extname, resolve } from "node:path";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { Image, Text } from "@earendil-works/pi-tui";
 import { Type } from "typebox";
-
-const MEDIA_TYPES: Record<string, string> = {
-	".png": "image/png",
-	".jpg": "image/jpeg",
-	".jpeg": "image/jpeg",
-	".gif": "image/gif",
-	".webp": "image/webp",
-	".bmp": "image/bmp",
-};
+import { resolveImagePath, resolveMediaType } from "./lib/show-core.js";
 
 interface ShowDetails {
 	path: string;
@@ -48,12 +39,9 @@ export default function (pi: ExtensionAPI) {
 		}),
 
 		async execute(_toolCallId, params, _signal, _onUpdate, ctx) {
-			const rawPath = params.path.startsWith("@")
-				? params.path.slice(1)
-				: params.path;
-			const absolutePath = resolve(ctx.cwd, rawPath);
+			const absolutePath = resolveImagePath(params.path, ctx.cwd);
 
-			const mediaType = MEDIA_TYPES[extname(absolutePath).toLowerCase()];
+			const mediaType = resolveMediaType(absolutePath);
 			if (!mediaType) {
 				return {
 					content: [
