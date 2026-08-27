@@ -1,6 +1,6 @@
 {
   "name": "pi-eda",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Pi tooling for interactive exploratory data analysis.",
   "license": "MIT",
   "author": "Shivam V Verma",
@@ -8,7 +8,12 @@
     "type": "git",
     "url": "git+https://github.com/shivam-v-verma/pi-eda.git"
   },
-  "keywords": ["pi-package", "pi", "eda", "exploratory-data-analysis"],
+  "keywords": [
+    "pi-package",
+    "pi",
+    "eda",
+    "exploratory-data-analysis"
+  ],
   "files": [
     "README.md",
     "agents",
@@ -29,10 +34,16 @@
     "vitest": "^4.1.11"
   },
   "pi": {
-    "extensions": ["./extensions"],
-    "skills": ["./skills"],
+    "extensions": [
+      "./extensions"
+    ],
+    "skills": [
+      "./skills"
+    ],
     "subagents": {
-      "agents": ["./agents"]
+      "agents": [
+        "./agents"
+      ]
     }
   }
 }
