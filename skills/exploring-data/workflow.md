@@ -7,7 +7,7 @@ exactly that stage of work; and then call `advance` before starting the next
 stage. Call `status` whenever you need to know where you are instead of holding
 it in your head.
 
-At the end of every turn, ask yourself if you have accomplished the exit 
+At the end of every turn, ask yourself if you have accomplished the exit
 condition to `advance` to the next stage.
 
 - If yes, `advance` should **always** be your first tool call.
@@ -94,9 +94,9 @@ We want to increase iteration speed and not waste user time.
   treating as heavy."
 - `advance` condition: you understand the computational cost of the script.
 
-### `Reread script`
+### `Reread and run script`
 
-Light path: Reread the script as a sanity check.
+Light path: reread the script as a sanity check, then run it in this session.
 
 - Does it match the user's stated intent/framing, does each nontrivial
   transform do what it should?
@@ -105,13 +105,10 @@ Light path: Reread the script as a sanity check.
 - This is a deliberately lower bar than the heavy path. A subtle mistake here
   can also be caught downstream in `/skill:finishing-exploratory-data-analysis`.
   We just want to sanity check here.
-- `advance` condition: you have reread the script and haven't found issues.
-
-### `Run now, this session`
-
-Light path continuation: run the smoke-tested script/plot in this session.
-
-- `advance` condition: you have run the script successfully on the data.
+- Once the reread finds no issues, run the smoke-tested script/plot in this
+  session.
+- `advance` condition: you have reread the script, found no issues, and run
+  it successfully on the data.
 
 ### `Dispatch script-checker`
 
@@ -178,7 +175,7 @@ Figure/analysis seems meaningful, ready to write up or commit.
 | Silently skipping the smoke test on a "just read cache and plot" script | Only skip for zero-computation cached-read-and-plot, and state that justification explicitly |
 | Trusting a sanity check that only ran on an easy/symmetric case | Pick a case that could actually have failed, especially for matching/ordering/canonicalization logic |
 | Checking that a smoke test ran fast/clean without looking at what it produced | Glance at the actual output values -- a clean run on garbage isn't a pass |
-| Running a light-path script without rereading it first because it's "just quick" | Reread against the stated intent/framing before running -- speed doesn't waive the check, it just changes who does it |
+| Running a light-path script without rereading it first because it's "just quick" | Reread against the stated intent/framing before running -- speed doesn't waive the check, it just changes who does it. Both happen in the same `Reread and run script` stage, but the reread must come first |
 | Launching a heavy scale-up "while the `script-checker` runs in the background" instead of waiting for it | Confirm the `script-checker` came back clean before launching -- don't launch and plan to fold feedback in later |
 | Letting 2+ small edits pile up on a heavy-path script since the last `script-checker` dispatch because none felt big enough alone | Dispatch again once 2+ edits have landed |
 | Treating a mid-work `script-checker` pass as covering the finishing skill's lock-in checkpoint | Different gate, different artifact -- a pending or completed `script-checker` pass never substitutes for it |

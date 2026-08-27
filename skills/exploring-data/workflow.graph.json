@@ -5,10 +5,9 @@
     "Peek at the data": ["Propose/ask a question"],
     "Propose/ask a question": ["Build script/plot"],
     "Build script/plot": ["Light or heavy?"],
-    "Light or heavy?": ["Reread script", "Dispatch script-checker"],
-    "Reread script": ["Build script/plot", "Run now, this session"],
+    "Light or heavy?": ["Reread and run script", "Dispatch script-checker"],
+    "Reread and run script": ["Build script/plot", "Summarize the answer"],
     "Dispatch script-checker": ["Build script/plot", "Dispatch job-runner"],
-    "Run now, this session": ["Summarize the answer"],
     "Dispatch job-runner": ["Summarize the answer"],
     "Summarize the answer": ["Continue analysis or lock in?"],
     "Continue analysis or lock in?": [
