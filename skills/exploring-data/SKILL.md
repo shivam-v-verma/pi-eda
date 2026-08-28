@@ -25,9 +25,8 @@ what the figure shows, not a conclusion dressed as a finding.
 
 If using this skill, you **must** first:
 
-- Run `init` on `eda-workflow-tracker` with `graphPath:
-  "skills/exploring-data/workflow.graph.json"` for guidance on what stage you
-  should be working on.
+- Run `init` on `eda-workflow-tracker` for guidance on what stage you should be
+  working on.
 - Read `workflow.md` for instructions for each stage.
 
 **Always call `advance` on the `eda-workflow-tracker` when done with a

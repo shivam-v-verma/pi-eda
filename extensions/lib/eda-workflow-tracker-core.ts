@@ -22,6 +22,13 @@ export function isValidGraph(value: unknown): value is WorkflowGraph {
   );
 }
 
+export function resolveGraphPath(
+  graphPath: string | undefined,
+  bundledGraphPath: string,
+): string {
+  return graphPath ?? bundledGraphPath;
+}
+
 export interface WorkflowTrackerDetails {
   action: "init" | "advance" | "status" | "clear";
   graphPath: string;

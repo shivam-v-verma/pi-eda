@@ -1,3 +1,4 @@
+import { readFile } from "node:fs/promises";
 import { describe, test, expect } from "vitest";
 import {
   handleInit,
@@ -7,6 +8,7 @@ import {
   formatWidgetText,
   reconstructFromBranch,
   isValidGraph,
+  resolveGraphPath,
   type WorkflowGraph,
   type BranchEntry,
 } from "../../extensions/lib/eda-workflow-tracker-core.js";
@@ -32,6 +34,37 @@ describe("handleInit", () => {
   test("next lists edges out of the start node", () => {
     const result = handleInit(graph, "some/path.json");
     expect(result.next).toEqual(["B"]);
+  });
+});
+
+describe("resolveGraphPath", () => {
+  test("uses the bundled graph when no custom path is supplied", () => {
+    expect(
+      resolveGraphPath(undefined, "/package/skills/exploring-data/workflow.graph.json"),
+    ).toBe("/package/skills/exploring-data/workflow.graph.json");
+  });
+
+  test("preserves a supplied custom graph path", () => {
+    expect(
+      resolveGraphPath(
+        "custom/workflow.graph.json",
+        "/package/skills/exploring-data/workflow.graph.json",
+      ),
+    ).toBe("custom/workflow.graph.json");
+  });
+});
+
+describe("exploring-data skill", () => {
+  test("initializes the bundled graph without a cwd-relative path", async () => {
+    const skill = await readFile(
+      new URL("../../skills/exploring-data/SKILL.md", import.meta.url),
+      "utf8",
+    );
+
+    expect(skill).toContain("Run `init` on `eda-workflow-tracker`");
+    expect(skill).not.toContain(
+      'graphPath: "skills/exploring-data/workflow.graph.json"',
+    );
   });
 });
 

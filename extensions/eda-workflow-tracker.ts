@@ -18,6 +18,7 @@
 
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import type {
   ExtensionAPI,
   ExtensionContext,
@@ -35,8 +36,13 @@ import {
   handleStatus,
   handleClear,
   formatWidgetText,
+  resolveGraphPath,
   reconstructFromBranch,
 } from "./lib/eda-workflow-tracker-core.js";
+
+const bundledGraphPath = fileURLToPath(
+  new URL("../skills/exploring-data/workflow.graph.json", import.meta.url),
+);
 
 const WorkflowTrackerParams = Type.Object({
   action: Type.Union(
@@ -51,7 +57,7 @@ const WorkflowTrackerParams = Type.Object({
   graphPath: Type.Optional(
     Type.String({
       description:
-        "Path to a workflow.graph.json ({ start, edges }) (for init)",
+        "Path to a workflow.graph.json ({ start, edges }); defaults to the bundled EDA graph (for init)",
     }),
   ),
   to: Type.Optional(
@@ -134,17 +140,12 @@ export default function (pi: ExtensionAPI) {
 
       switch (params.action) {
         case "init": {
-          if (!params.graphPath) {
-            result = {
-              graphPath,
-              current,
-              next: [],
-              error: "graphPath required for init",
-            };
-            break;
-          }
+          const selectedGraphPath = resolveGraphPath(
+            params.graphPath,
+            bundledGraphPath,
+          );
           try {
-            const parsed = await loadGraphFile(ctx.cwd, params.graphPath);
+            const parsed = await loadGraphFile(ctx.cwd, selectedGraphPath);
             if (!isValidGraph(parsed)) {
               throw new Error("expected { start: string, edges: object }");
             }
@@ -154,11 +155,11 @@ export default function (pi: ExtensionAPI) {
               graphPath,
               current,
               next: [],
-              error: `failed to load graph at "${params.graphPath}": ${(err as Error).message}`,
+              error: `failed to load graph at "${selectedGraphPath}": ${(err as Error).message}`,
             };
             break;
           }
-          result = handleInit(graph, params.graphPath);
+          result = handleInit(graph, selectedGraphPath);
           graphPath = result.graphPath;
           current = result.current;
           updateWidget(ctx);
