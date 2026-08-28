@@ -1,6 +1,6 @@
 {
   "name": "pi-eda",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Pi tooling for interactive exploratory data analysis.",
   "license": "MIT",
   "author": "Shivam V Verma",
