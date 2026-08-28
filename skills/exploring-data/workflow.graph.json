@@ -9,8 +9,7 @@
     "Reread and run script": ["Build script/plot", "Summarize the answer"],
     "Dispatch script-checker": ["Build script/plot", "Dispatch job-runner"],
     "Dispatch job-runner": ["Summarize the answer"],
-    "Summarize the answer": ["Continue analysis or lock in?"],
-    "Continue analysis or lock in?": [
+    "Summarize the answer": [
       "Propose/ask a question",
       "/skill:finishing-exploratory-data-analysis"
     ]

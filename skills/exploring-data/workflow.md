@@ -146,14 +146,10 @@ Heavy path continuation: launch the `job-runner` only once the
 - `show` the figure(s) to the user, then summarize briefly with bullets.
 - Core principle: the user decides the interpretation. Continue interrogating
   the user until it makes sense to you and is consistent with the dataset.
-- `advance` condition: you understand the user's interpretation of the figure.
-
-### `Continue analysis or lock in?`
-
-- Ask the user whether to continue with another question or lock in the
-  analysis; keep interrogating until they pick one. "Next question" loops back
-  to `Propose/ask a question`, "finish analysis" exits to the finishing skill.
-- `advance` condition: the user has decided to continue the session or finish it.
+- Once the user makes a clear interpretation, ask whether to continue with another
+  question or lock in the analysis. Keep interrogating until they pick one.
+- `advance` condition: you understand the user's interpretation of the
+  figure, and the user has decided to continue the session or finish it.
 
 ### `/skill:finishing-exploratory-data-analysis`
 
