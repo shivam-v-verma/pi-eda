@@ -11,15 +11,31 @@ export interface WorkflowGraph {
   edges: Record<string, string[]>;
 }
 
-/** True if `value` has the { start: string, edges: object } shape a WorkflowGraph requires. */
+/** True if `value` has a known start node and string-array edges. */
 export function isValidGraph(value: unknown): value is WorkflowGraph {
   if (typeof value !== "object" || value === null) return false;
   const candidate = value as Record<string, unknown>;
-  return (
-    typeof candidate.start === "string" &&
-    typeof candidate.edges === "object" &&
-    candidate.edges !== null
-  );
+  if (
+    typeof candidate.start !== "string" ||
+    typeof candidate.edges !== "object" ||
+    candidate.edges === null ||
+    Array.isArray(candidate.edges)
+  ) {
+    return false;
+  }
+
+  const edges = candidate.edges as Record<string, unknown>;
+  if (
+    !Object.values(edges).every(
+      (targets) =>
+        Array.isArray(targets) &&
+        targets.every((target) => typeof target === "string"),
+    )
+  ) {
+    return false;
+  }
+
+  return allNodes(edges as Record<string, string[]>).has(candidate.start);
 }
 
 export function resolveGraphPath(

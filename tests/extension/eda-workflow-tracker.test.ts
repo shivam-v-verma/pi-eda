@@ -81,6 +81,26 @@ describe("isValidGraph", () => {
     expect(isValidGraph({ edges: {} })).toBe(false);
   });
 
+  test("rejects an array used as edges", () => {
+    expect(isValidGraph({ start: "A", edges: [] })).toBe(false);
+  });
+
+  test("rejects an edge value that is not an array", () => {
+    expect(isValidGraph({ start: "A", edges: { A: 42 } })).toBe(false);
+  });
+
+  test("rejects an edge target that is not a string", () => {
+    expect(isValidGraph({ start: "A", edges: { A: [42] } })).toBe(false);
+  });
+
+  test("rejects a start node absent from the graph", () => {
+    expect(isValidGraph({ start: "Z", edges: { A: ["B"] } })).toBe(false);
+  });
+
+  test("accepts a terminal start node named only as an edge target", () => {
+    expect(isValidGraph({ start: "B", edges: { A: ["B"] } })).toBe(true);
+  });
+
   test("rejects non-object input", () => {
     expect(isValidGraph(null)).toBe(false);
     expect(isValidGraph("A")).toBe(false);
