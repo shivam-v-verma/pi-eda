@@ -16,6 +16,7 @@
   ],
   "files": [
     "README.md",
+    "LICENSE",
     "agents",
     "eda.mplstyle.example",
     "extensions",
