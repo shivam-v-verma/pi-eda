@@ -68,6 +68,22 @@ describe("exploring-data skill", () => {
   });
 });
 
+describe("exploring-data workflow", () => {
+  test("requires a report name before advancing from scope", async () => {
+    const workflow = await readFile(
+      new URL("../../skills/exploring-data/workflow.md", import.meta.url),
+      "utf8",
+    );
+
+    expect(workflow).toMatch(
+      /`advance` condition: the user has confirmed the scope of the analysis and has\s+given a report name\./,
+    );
+    expect(workflow).not.toContain(
+      "or the user has already requested a specific question.",
+    );
+  });
+});
+
 describe("isValidGraph", () => {
   test("accepts a well-shaped graph", () => {
     expect(isValidGraph({ start: "A", edges: { A: ["B"] } })).toBe(true);

@@ -28,10 +28,10 @@ condition to `advance` to the next stage.
 - Expect the scope to narrow or shift as the data yields a story during
   this analysis. This step is purely for you to ground yourself.
 - You should **never** be running code at this stage. If the user has
-  already offered specific questions/approaches, you must confirm your
-  understanding and then `advance`.
+  already offered a specific question/approach, it establishes the scope but
+  you must confirm a report name before advancing.
 - `advance` condition: the user has confirmed the scope of the analysis and has
-  given a report name; or the user has already requested a specific question.
+  given a report name.
 
 ### `Peek at the data`
 
