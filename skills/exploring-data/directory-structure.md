@@ -7,8 +7,10 @@ wanted).
 
 ```text
 eda/
+  .gitignore                  # containing `outputs/`
   index.md                    # landing pad for readers -- what's been done,
                                # links to each report below
+  outputs/                    # gitignored data/caches, can be shared across analyses
   customer_churn.md           # a report -- lives directly under eda/
   customer_churn/             # paired folder, same stem as the report file
     scripts/
@@ -35,6 +37,9 @@ eda/
 - Shared code (data loading, plotting helpers, constants) goes in an
   unnumbered `common_<topic>.py` and gets imported from there instead --
   never import one numbered script from another.
+- `eda/outputs/` is a top-level, shared cache. Any script can read from or
+  write to it. No substructure required inside it. Scripts that produce
+  data caches should check-or-recompute so it can be repopulated if needed.
 
 ## Common Mistakes
 
