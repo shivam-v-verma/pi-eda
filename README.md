@@ -13,10 +13,16 @@ The [`pi-subagents`](https://www.npmjs.com/package/pi-subagents) package, for
 custom-agent support and the `/skill:pi-subagents` dispatch pattern the skills
 reference.
 
+For plot review, use Pi interactively in a terminal with inline-image support.
+Leave Pi's default `terminal.showImages` setting enabled so `show` can render
+figures to the user without adding their pixels to model context.
+
 ## Install
 
+Install dependencies & this package:
+
 ```bash
-pi install git:github.com/shivam-v-verma/pi-eda
+pi install npm:pi-subagents
 pi install npm:pi-eda
 ```
 

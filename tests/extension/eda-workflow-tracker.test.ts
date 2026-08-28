@@ -84,6 +84,27 @@ describe("exploring-data workflow", () => {
   });
 });
 
+describe("README", () => {
+  test("documents the required dispatcher installation", async () => {
+    const readme = await readFile(
+      new URL("../../README.md", import.meta.url),
+      "utf8",
+    );
+
+    expect(readme).toContain("pi install npm:pi-subagents");
+  });
+
+  test("recommends inline-image terminal support for plot review", async () => {
+    const readme = await readFile(
+      new URL("../../README.md", import.meta.url),
+      "utf8",
+    );
+
+    expect(readme).toContain("inline-image support");
+    expect(readme).toContain("`terminal.showImages`");
+  });
+});
+
 describe("isValidGraph", () => {
   test("accepts a well-shaped graph", () => {
     expect(isValidGraph({ start: "A", edges: { A: ["B"] } })).toBe(true);
