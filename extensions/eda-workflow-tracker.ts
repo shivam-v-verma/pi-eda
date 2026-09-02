@@ -197,6 +197,10 @@ export default function (pi: ExtensionAPI) {
         }
         case "status": {
           result = handleStatus(graph, current, graphPath);
+          if (!graph && current) {
+            result.error =
+              "graph not loaded -- current state was reconstructed but the graph file is unavailable; call init to reload";
+          }
           break;
         }
         case "clear": {
