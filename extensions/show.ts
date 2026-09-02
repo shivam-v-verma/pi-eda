@@ -95,7 +95,7 @@ export default function (pi: ExtensionAPI) {
 			}
 			return new Image(details.base64, details.mediaType, theme, {
 				maxWidthCells: 80,
-				maxHeightCells: 24,
+				maxHeightCells: 36,
 			});
 		},
 	});
